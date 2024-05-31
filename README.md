@@ -1,0 +1,2 @@
+# gaalicrypt
+ Gaali Encrypter/Decrypter
