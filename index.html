@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Gaali Encrypt/Decrypt</title>
+</head>
+
+<body>
+
+	<style>
+		.inp {
+			width: 100%;
+			padding: 8px;
+			margin: 4px 0;
+			display: inline-block;
+			border: 1px solid #434343;
+			box-sizing: border-box;
+			border-radius: 5px;
+			outline: none;
+		}
+	</style>
+
+	<!-- Make simple form with 2 inputs, 1 for input and 1 for output -->
+	<!-- Onkeyup on first input, use the function and output value to 2nd input -->
+	<!-- On focus second input, copy the value to clipboard -->
+
+	<div
+		style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border: 1px solid #343434; padding: 12px; border-radius: 5px;">
+
+		<h1 style="margin-bottom: 12.345px; margin-top: 0; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; text-align: center;">Gaali Encrypter</h1>
+
+		<h3 style="margin-bottom: 12.345px; margin-top: 0; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; text-align: center; color: #777; font-weight: normal;">Input to encrypt, focus output to copy, right click input to paste</h3>
+
+		<form action="">
+			<input type="text" id="input"
+				onkeyup="document.getElementById('output').value = encrypt_decrypt(this.value);" placeholder="Input"
+				oncontextmenu="contextMenu(event)" class="inp">
+			<input type="text" id="output" onfocus="this.select(); document.execCommand('copy');" class="inp" placeholder="output">
+		</form>
+
+	</div>
+
+	<script>
+		String.prototype.replaceAt = function (index, replacement) {
+			return this.substring(0, index) + replacement + this.substring(index + replacement.length);
+		}
+
+		async function contextMenu(e) {
+			e.preventDefault()
+			// Paste the copied text to the input field
+			var text = await navigator.clipboard.readText()
+			document.getElementById('input').value = text
+			document.getElementById('output').value = encrypt_decrypt(text)
+		}
+
+		var str1 = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQR'
+		var str2 = `STUVWXYZ1234567890!@#$%^&*() -=+_.,></?'";:|`
+		function encrypt_decrypt(str) {
+			for (var i = 0; i < str.length; i++) {
+				var index = str1.indexOf(str[i])
+				if (index == -1) {
+					index = str2.indexOf(str[i])
+					str = str.replaceAt(i, str1[index])
+				} else {
+					str = str.replaceAt(i, str2[index])
+				}
+			}
+
+			return str
+		}
+	</script>
+</body>
+
+</html>
